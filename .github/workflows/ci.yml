@@ -1,0 +1,57 @@
+name: CI
+
+on: [push]
+
+env:
+  COMPOSER_MEMORY_LIMIT: -1
+  BASE_URL: "http://localhost:8080"
+  VIRTUAL_HOST: "localhost"
+
+jobs:
+  build:
+    runs-on: 'ubuntu-20.04'
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: ['7.3', '7.4']
+
+    services:
+      browser:
+        image: selenium/standalone-chrome
+        network_mode: host
+
+    steps:
+      - name: Dump matrix context
+        env:
+          MATRIX_CONTEXT: ${{ toJSON(matrix) }}
+        run: echo "$MATRIX_CONTEXT"
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: gd, pdo_sqlite
+
+      - name: Update composer
+        run: composer --verbose self-update --${{ matrix.composer-channel }}
+
+      - name: Dump composer verson
+        run: composer --version
+
+      - name: Validate composer.json
+        run: composer --verbose validate
+
+      - name: Install dependencies
+        run: composer --verbose install
+
+      - run: ./vendor/bin/drush site-install --verbose --yes --db-url=sqlite://tmp/site.sqlite
+
+      - run: ./vendor/bin/drush runserver $BASE_URL &
+
+      - run: until curl -s $BASE_URL; do true; done > /dev/null
+
+      - name: Run codeception tests.
+        run: ./vendor/bin/codecept run acceptance --steps

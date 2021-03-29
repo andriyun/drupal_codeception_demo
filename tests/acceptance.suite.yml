@@ -8,13 +8,12 @@ actor: AcceptanceTester
 modules:
     enabled:
         - WebDriver:
-            browser: chrome
-            host: browser
-            url: http://codeception.docksal
+              browser: chrome
+              host: "localhost:8080"
+              url: browser
         - DrupalBootstrap:
-              root: '/var/www/web'
               site_path: 'sites/default'
-              http_host: 'codeception.docksal'
+              http_host: "%VIRTUAL_HOST%"
         - DrupalEntity:
               cleanup_test: true
               cleanup_failed: false
@@ -23,16 +22,16 @@ modules:
                   - node
                   - taxonomy_term
         - DrupalUser:
-            default_role: 'authenticated'
-            driver: 'WebDriver'
-            drush: '/var/www/vendor/bin/drush'
-            cleanup_entities:
-                - media
-                - file
-            cleanup_test: true
-            cleanup_failed: false
-            cleanup_suite: true
+              default_role: 'authenticated'
+              driver: 'WebDriver'
+              drush: "../vendor/bin/drush"
+              cleanup_entities:
+                  - media
+                  - file
+              cleanup_test: true
+              cleanup_failed: false
+              cleanup_suite: true
         - DrupalAcceptance:
         - \Helper\Acceptance
 step_decorators:
-  - \Codeception\Step\ConditionalAssertion
+    - \Codeception\Step\ConditionalAssertion
