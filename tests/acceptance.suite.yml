@@ -9,8 +9,8 @@ modules:
     enabled:
         - WebDriver:
               browser: chrome
-              host: "localhost:8080"
-              url: browser
+              host: browser
+              url: "http://%VIRTUAL_HOST%"
         - DrupalBootstrap:
               site_path: 'sites/default'
               http_host: "%VIRTUAL_HOST%"
