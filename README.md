@@ -1,6 +1,6 @@
 # Drupal codeception demo
 
-The purpose of this project demonstrate test capabilities of Codecetion
+The purpose of this project demonstrate test capabilities of Codeception
 in Drupal CMS
 
 ## Run local env with Docksal

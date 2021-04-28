@@ -7,6 +7,14 @@ paths:
 actor_suffix: Tester
 params:
     - env
+coverage:
+    enabled: true
+    include:
+        - web/core/modules/user/*
+    low_limit: 30
+    high_limit: 60
+    show_uncovered: false
+    show_only_summary: false
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
