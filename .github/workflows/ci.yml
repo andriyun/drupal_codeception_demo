@@ -43,3 +43,10 @@ jobs:
 
       - name: Run codeception tests.
         run: ./vendor/bin/codecept run acceptance --steps
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Screenshots
+          path: tests/_output/debug
+            
